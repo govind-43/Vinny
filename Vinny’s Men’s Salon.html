@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vinny’s Men’s Salon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{ink:'#0D0D0D',violet:'#A020F0'},fontFamily:{head:['Montserrat','Arial','sans-serif'],body:['Inter','Arial','sans-serif']}}}}
+</script>
+<style>
+:root{color-scheme:dark;padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:90px;background:#0D0D0D}
+body{background:#0D0D0D;color:#e8e8ea;font-family:Inter,Arial,sans-serif}
+[x-cloak]{display:none!important}
+a,button{transition:all .3s ease-in-out}
+:focus-visible{outline:2px solid #A020F0;outline-offset:3px}
+.glow{box-shadow:0 0 16px 2px rgba(160,32,240,.45)}
+.glow:hover{box-shadow:0 0 34px 10px rgba(160,32,240,.6)}
+.nav-link{position:relative;padding:.25rem 0}
+.nav-link::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:#A020F0;transform:scaleX(0);transform-origin:center;transition:transform .3s ease-in-out;box-shadow:0 0 8px #A020F0}
+.nav-link:hover::after{transform:scaleX(1)}
+.logo-glow{text-shadow:0 0 6px rgba(255,255,255,.85),0 0 18px rgba(255,255,255,.35)}
+.logo-svg{filter:drop-shadow(0 0 4px rgba(255,255,255,.8))}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.fu{opacity:0;animation:fadeUp .8s ease-out forwards}
+.grid-bg{background-image:linear-gradient(rgba(160,32,240,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(160,32,240,.14) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 78%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 78%)}
+@media (prefers-reduced-motion:reduce){.fu{animation:none;opacity:1}html{scroll-behavior:auto}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body x-data="app()" @keydown.escape.window="menu=false;modal=false" :class="(menu||modal)&&'overflow-hidden'">
+
+<!-- HEADER -->
+<header class="fixed top-0 inset-x-0 z-50 bg-ink/70 backdrop-blur-md border-b border-white/10" style="padding-top:env(safe-area-inset-top,0px)">
+  <div class="max-w-7xl mx-auto px-5 h-20 grid grid-cols-3 items-center">
+    <nav class="hidden lg:flex gap-6 text-sm font-medium text-white/80" aria-label="Primary">
+      <a class="nav-link hover:text-white" href="#home">Home</a>
+      <a class="nav-link hover:text-white" href="#services">Services</a>
+      <a class="nav-link hover:text-white" href="#crew">The Crew</a>
+      <a class="nav-link hover:text-white" href="#gallery">Gallery</a>
+      <a class="nav-link hover:text-white" href="#contact">Contact</a>
+    </nav>
+    <button class="lg:hidden justify-self-start p-2 -ml-2 text-white" @click="menu=true" aria-label="Open menu">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+
+    <!-- Logo -->
+    <a href="#home" class="justify-self-center flex flex-col items-center text-center leading-none" aria-label="Vinny’s Men’s Salon, home">
+      <svg class="logo-svg" width="44" height="26" viewBox="0 0 44 26" fill="none" stroke="#f4f4f8" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 22 L2 7 L12 14 L22 3 L32 14 L42 7 L40 22 Z" fill="rgba(255,255,255,.08)"/>
+        <circle cx="2" cy="6" r="1.8" fill="#f4f4f8"/><circle cx="12" cy="13" r="1.5" fill="#f4f4f8"/><circle cx="22" cy="2.6" r="1.8" fill="#f4f4f8"/><circle cx="32" cy="13" r="1.5" fill="#f4f4f8"/><circle cx="42" cy="6" r="1.8" fill="#f4f4f8"/>
+      </svg>
+      <span class="logo-glow font-head font-bold text-[10px] sm:text-xs text-white tracking-[.28em] sm:tracking-[.38em] mt-1.5 whitespace-nowrap pl-[.3em]">VINNY’S MEN’S SALON</span>
+      <svg class="logo-svg mt-1" width="96" height="14" viewBox="0 0 96 14" fill="none" stroke="#f4f4f8" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+        <path d="M2 7 C14 -3 30 -2 48 7 C66 16 82 17 94 7 C82 -3 66 -2 48 7 C30 16 14 17 2 7 Z"/>
+      </svg>
+    </a>
+
+    <div class="justify-self-end">
+      <button @click="book()" class="glow hidden lg:inline-flex bg-violet text-white font-head font-bold text-xs tracking-widest px-6 py-3 rounded-full transition-all duration-300 ease-in-out hover:-translate-y-0.5">BOOK APPOINTMENT</button>
+      <button @click="book()" class="glow lg:hidden bg-violet text-white font-head font-bold text-[11px] tracking-wider px-4 py-2.5 rounded-full">BOOK</button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE OVERLAY -->
+<div class="fixed inset-0 z-[60] lg:hidden" :class="menu?'pointer-events-auto':'pointer-events-none'" x-cloak>
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300" :class="menu?'opacity-100':'opacity-0'" @click="menu=false"></div>
+  <aside class="absolute right-0 top-0 h-full w-4/5 max-w-sm bg-[#111] border-l border-violet/40 p-8 flex flex-col gap-2 transition-transform duration-300 ease-in-out" :class="menu?'translate-x-0':'translate-x-full'" style="padding-top:calc(2rem + env(safe-area-inset-top,0px))">
+    <button class="self-end p-2 text-white" @click="menu=false" aria-label="Close menu"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    <template x-for="l in links" :key="l[0]">
+      <a :href="l[1]" @click="menu=false" class="font-head font-bold text-2xl py-3 border-b border-white/10 text-white hover:text-violet hover:pl-2" x-text="l[0]"></a>
+    </template>
+    <button @click="menu=false;book()" class="glow mt-6 bg-violet text-white font-head font-bold tracking-widest py-4 rounded-full">BOOK APPOINTMENT</button>
+  </aside>
+</div>
+
+<main>
+<!-- HERO -->
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden px-5 pt-28 pb-20" x-data="{mx:0,my:0}" @mousemove="mx=($event.clientX/innerWidth-.5)*40;my=($event.clientY/innerHeight-.5)*40">
+  <div class="absolute -inset-16 grid-bg transition-transform duration-300 ease-out" :style="`transform:translate(${-mx}px,${-my}px)`"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[34rem] max-w-full h-[34rem] rounded-full bg-violet/20 blur-[120px] pointer-events-none"></div>
+  <div class="relative text-center max-w-4xl">
+    <p class="fu font-head font-medium text-violet text-xs sm:text-sm tracking-[.4em]" style="animation-delay:.1s">THE MEN’S GROOMING LOUNGE</p>
+    <h1 class="fu font-head font-black text-white leading-[1.05] mt-5 text-[clamp(1.9rem,8.5vw,5.5rem)]" style="animation-delay:.3s">EXPERIENCE THE ART OF<br>MENSGROOMING.</h1>
+    <p class="fu text-white/70 text-base sm:text-lg max-w-2xl mx-auto mt-6 font-light leading-relaxed" style="animation-delay:.5s">Sharp cuts, slow-hands shaves and a lounge worth lingering in. Every visit is built around you: your hair, your beard, your time.</p>
+    <div class="fu mt-10" style="animation-delay:.7s">
+      <button @click="book()" class="glow bg-violet text-white font-head font-bold tracking-widest text-sm px-9 py-4 rounded-full transition-all duration-300 ease-in-out hover:-translate-y-1.5">Schedule Your Appointment</button>
+    </div>
+    <div class="fu mt-14 flex justify-center gap-8 sm:gap-14 text-xs text-white/60" style="animation-delay:.9s">
+      <div><b class="block font-head text-white text-lg">12 yrs</b>behind the chair</div>
+      <div><b class="block font-head text-white text-lg">3 stylists</b>one standard</div>
+      <div><b class="block font-head text-white text-lg">7 days</b>open every week</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="px-5 py-24 max-w-7xl mx-auto">
+  <h2 class="font-head font-extrabold text-3xl sm:text-4xl text-white text-center">Services</h2>
+  <p class="text-center text-white/60 mt-3">Tap a service for what’s included.</p>
+  <div class="grid md:grid-cols-3 gap-6 mt-14 items-start">
+    <template x-for="(s,i) in services" :key="s.name">
+      <article class="rounded-2xl bg-[#141414] border p-7 transition-all duration-300 ease-in-out hover:-translate-y-1"
+        :class="s.hero?'border-violet shadow-[0_0_40px_6px_rgba(160,32,240,.4)] md:scale-105 md:-translate-y-2':'border-white/10 hover:border-violet/60'">
+        <div class="flex items-start justify-between gap-4">
+          <h3 class="font-head font-bold text-xl text-white" x-text="s.name"></h3>
+          <span class="font-head font-extrabold text-2xl text-violet" x-text="s.price"></span>
+        </div>
+        <p class="text-sm text-white/50 mt-2" x-text="s.time"></p>
+        <p class="text-white/70 mt-4 text-sm leading-relaxed" x-text="s.blurb"></p>
+        <button class="mt-5 flex items-center gap-2 text-sm font-semibold text-white hover:text-violet" @click="open=open===i?null:i" :aria-expanded="open===i">
+          <span x-text="open===i?'Hide details':'View details'"></span>
+          <svg class="transition-transform duration-300" :class="open===i&&'rotate-180'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div x-show="open===i" x-transition.opacity.duration.300ms x-cloak>
+          <ul class="mt-4 space-y-2 text-sm text-white/70 border-t border-white/10 pt-4">
+            <template x-for="d in s.details" :key="d"><li class="flex gap-2"><span class="text-violet">&#10003;</span><span x-text="d"></span></li></template>
+          </ul>
+          <button @click="book(s.name)" class="glow mt-5 w-full bg-violet text-white font-head font-bold text-xs tracking-widest py-3 rounded-full">BOOK THIS SERVICE</button>
+        </div>
+      </article>
+    </template>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section id="gallery" class="px-5 py-24 bg-[#101010] border-y border-white/5">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="font-head font-extrabold text-3xl sm:text-4xl text-white text-center">Before &amp; After</h2>
+    <p class="text-center text-white/60 mt-3">Pick a look, then drag across the image to compare.</p>
+    <div class="flex flex-wrap justify-center gap-3 mt-8" role="tablist">
+      <template x-for="(l,i) in looks" :key="l.name">
+        <button role="tab" :aria-selected="look===i" @click="look=i;pos=50" class="px-5 py-2.5 rounded-full text-sm font-semibold border"
+          :class="look===i?'bg-violet border-violet text-white shadow-[0_0_20px_3px_rgba(160,32,240,.5)]':'border-white/20 text-white/70 hover:border-violet hover:text-white'" x-text="l.name"></button>
+      </template>
+    </div>
+    <div class="relative mt-8 mx-auto max-w-md aspect-[5/6] rounded-2xl overflow-hidden border border-violet/40 shadow-[0_0_40px_4px_rgba(160,32,240,.25)] select-none">
+      <template x-for="layer in ['after','before']" :key="layer">
+        <div class="absolute inset-0" :style="layer==='before'?`clip-path:inset(0 ${100-pos}% 0 0)`:''" :class="layer==='before'?'bg-[#1c1c1c]':'bg-gradient-to-b from-[#2a1342] to-[#140a1f]'">
+          <svg viewBox="0 0 200 240" class="w-full h-full" aria-hidden="true">
+            <path d="M20 240 C24 196 62 184 100 184 C138 184 176 196 180 240Z" fill="#242424" stroke="#A020F0" stroke-opacity=".5"/>
+            <rect x="86" y="160" width="28" height="30" fill="#c9a07d"/>
+            <ellipse cx="100" cy="110" rx="48" ry="62" fill="#d8b08c"/>
+            <path :d="looks[look][layer==='before'?'bb':'ab']" fill="#1a1a1a" stroke="#A020F0" stroke-opacity=".6"/>
+            <path :d="looks[look][layer==='before'?'bh':'ah']" fill="#151515" stroke="#A020F0" stroke-opacity=".6"/>
+            <circle cx="84" cy="108" r="3" fill="#222"/><circle cx="116" cy="108" r="3" fill="#222"/>
+            <path d="M88 138 Q100 144 112 138" stroke="#7a4f3a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+          <span class="absolute top-3 px-3 py-1 rounded-full text-[11px] font-head font-bold tracking-widest bg-black/60 text-white" :class="layer==='before'?'left-3':'right-3'" x-text="layer.toUpperCase()"></span>
+        </div>
+      </template>
+      <div class="absolute inset-y-0 w-0.5 bg-violet shadow-[0_0_14px_3px_#A020F0] pointer-events-none" :style="`left:${pos}%`">
+        <span class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-violet text-white grid place-items-center text-xs font-bold">&#8596;</span>
+      </div>
+      <input type="range" min="0" max="100" x-model.number="pos" aria-label="Before and after comparison" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize">
+    </div>
+  </div>
+</section>
+
+<!-- CREW -->
+<section id="crew" class="px-5 py-24 max-w-6xl mx-auto">
+  <h2 class="font-head font-extrabold text-3xl sm:text-4xl text-white text-center">The Crew</h2>
+  <div class="grid sm:grid-cols-3 gap-8 mt-14">
+    <template x-for="m in crew" :key="m.name">
+      <article class="group relative rounded-2xl bg-[#141414] border border-white/10 p-8 text-center transition-all duration-300 ease-in-out hover:scale-105 hover:border-violet/50">
+        <div class="absolute -inset-6 -z-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" style="background:radial-gradient(circle,rgba(160,32,240,.5) 0%,transparent 65%)"></div>
+        <div class="mx-auto w-28 h-28 rounded-full grid place-items-center font-head font-extrabold text-4xl text-white border-2 border-violet/60 bg-gradient-to-br from-[#2a1342] to-[#0D0D0D] group-hover:shadow-[0_0_28px_6px_rgba(160,32,240,.5)] transition-all duration-300" x-text="m.name[0]"></div>
+        <h3 class="font-head font-bold text-xl text-white mt-6" x-text="m.name"></h3>
+        <p class="text-violet text-sm font-semibold mt-1" x-text="m.role"></p>
+        <p class="text-white/60 text-sm mt-3 leading-relaxed" x-text="m.bio"></p>
+      </article>
+    </template>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer id="contact" class="bg-[#090909] border-t border-white/10 px-5 pt-20 pb-10">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+    <div>
+      <h2 class="font-head font-extrabold text-2xl text-white">Find us</h2>
+      <div class="relative mt-6 h-64 rounded-2xl overflow-hidden border border-white/10 bg-[#121212]" role="img" aria-label="Map placeholder">
+        <div class="absolute inset-0 grid-bg opacity-70"></div>
+        <div class="absolute inset-0" style="background:linear-gradient(115deg,transparent 46%,rgba(255,255,255,.07) 47%,rgba(255,255,255,.07) 49%,transparent 50%)"></div>
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+          <span class="w-5 h-5 rounded-full bg-violet shadow-[0_0_24px_8px_rgba(160,32,240,.7)]"></span>
+          <span class="mt-3 text-xs text-white/70 bg-black/60 px-3 py-1 rounded-full">Map placeholder</span>
+        </div>
+      </div>
+      <address class="not-italic mt-6 text-white/80 leading-relaxed"><b class="text-white font-head">Vinny’s Men’s Salon</b><br>Dalan Nanbuel Road, Loren-Aogros</address>
+    </div>
+    <div>
+      <h2 class="font-head font-extrabold text-2xl text-white">Opening hours</h2>
+      <ul class="mt-6 divide-y divide-white/10 text-sm">
+        <template x-for="(h,i) in hours" :key="h[0]">
+          <li class="flex justify-between py-3" :class="today===h[2]?'text-white font-semibold':'text-white/60'">
+            <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full" :class="today===h[2]?'bg-violet shadow-[0_0_8px_2px_#A020F0]':'bg-transparent'"></span><span x-text="h[0]"></span></span>
+            <span x-text="h[1]"></span>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto mt-16 pt-6 border-t border-white/10 flex flex-col sm:flex-row gap-4 justify-between items-center text-sm text-white/50">
+    <div class="flex gap-6">
+      <a class="hover:text-violet" href="#" @click.prevent>Instagram @vinnysmensalon</a>
+      <a class="hover:text-violet" href="#" @click.prevent>Facebook</a>
+      <a class="hover:text-violet" href="#" @click.prevent>WhatsApp</a>
+    </div>
+    <p>&copy; 2026 Vinny’s Men’s Salon</p>
+  </div>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div x-show="modal" x-cloak class="fixed inset-0 z-[70] grid place-items-center p-5">
+  <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" @click="modal=false"></div>
+  <div class="relative w-full max-w-md rounded-2xl bg-[#141414] border border-violet/50 shadow-[0_0_50px_8px_rgba(160,32,240,.35)] p-7" role="dialog" aria-modal="true" aria-label="Book an appointment">
+    <button class="absolute top-4 right-4 text-white/60 hover:text-white" @click="modal=false" aria-label="Close">&#10005;</button>
+    <template x-if="!done">
+      <div>
+        <h3 class="font-head font-extrabold text-2xl text-white">Book an appointment</h3>
+        <div class="mt-6 space-y-4">
+          <label class="block text-sm text-white/70">Your name
+            <input x-model="form.name" type="text" class="mt-1 w-full rounded-lg bg-[#0D0D0D] border border-white/15 px-4 py-3 text-white focus:border-violet outline-none"></label>
+          <label class="block text-sm text-white/70">Service
+            <select x-model="form.service" class="mt-1 w-full rounded-lg bg-[#0D0D0D] border border-white/15 px-4 py-3 text-white focus:border-violet outline-none">
+              <template x-for="s in services" :key="s.name"><option x-text="s.name"></option></template></select></label>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="block text-sm text-white/70">Date
+              <input x-model="form.date" type="date" class="mt-1 w-full rounded-lg bg-[#0D0D0D] border border-white/15 px-3 py-3 text-white focus:border-violet outline-none"></label>
+            <label class="block text-sm text-white/70">Time
+              <select x-model="form.time" class="mt-1 w-full rounded-lg bg-[#0D0D0D] border border-white/15 px-3 py-3 text-white focus:border-violet outline-none">
+                <template x-for="t in ['10:00','12:00','14:00','16:00','18:00','20:00']" :key="t"><option x-text="t"></option></template></select></label>
+          </div>
+          <p class="text-sm text-red-400" x-show="err" x-text="err"></p>
+          <button @click="submit()" class="glow w-full bg-violet text-white font-head font-bold tracking-widest text-sm py-4 rounded-full">Confirm appointment</button>
+        </div>
+      </div>
+    </template>
+    <template x-if="done">
+      <div class="text-center py-6">
+        <div class="mx-auto w-14 h-14 rounded-full bg-violet grid place-items-center text-2xl glow">&#10003;</div>
+        <h3 class="font-head font-extrabold text-2xl text-white mt-5">You’re booked, <span x-text="form.name"></span></h3>
+        <p class="text-white/70 mt-3 text-sm"><span x-text="form.service"></span> on <span x-text="form.date"></span> at <span x-text="form.time"></span>. This is a demo, so no booking was sent.</p>
+        <button @click="modal=false" class="mt-6 text-violet font-semibold hover:text-white">Close</button>
+      </div>
+    </template>
+  </div>
+</div>
+
+<script>
+function app(){return{
+  menu:false,modal:false,done:false,err:'',open:1,look:0,pos:50,today:new Date().getDay(),
+  form:{name:'',service:'Shampoo & Deep Wash',date:'',time:'12:00'},
+  links:[['Home','#home'],['Services','#services'],['The Crew','#crew'],['Gallery','#gallery'],['Contact','#contact']],
+  services:[
+    {name:'Precision Haircuts',price:'$30.00',time:'30 mins',blurb:'A cut mapped to your head shape and hair growth.',details:['Consultation and clipper or scissor cut','Neck shave with hot towel','Styled with matte finish product']},
+    {name:'Shampoo & Deep Wash',price:'$45.00',time:'45 mins',hero:true,blurb:'Our signature reset: a deep cleanse and scalp massage.',details:['Double cleanse with scalp exfoliation','10-minute pressure-point scalp massage','Steam towel, conditioning mask and blow-dry']},
+    {name:'Beard Styling & Design',price:'$25.00',time:'30 mins',blurb:'Clean lines, balanced shape and a softer beard.',details:['Shape design to suit your jaw','Razor-edged line-up','Beard oil and balm finish']}
+  ],
+  looks:[
+    {name:'Classic Taper',bh:'M46 104 C34 40 78 14 100 24 C132 10 170 44 154 104 C150 72 132 50 100 56 C70 50 52 72 46 104Z M60 40 L48 22 L72 32Z M140 36 L158 20 L150 44Z',ah:'M52 98 C50 55 78 40 100 40 C124 40 150 55 148 98 C140 70 124 62 100 62 C76 62 60 70 52 98Z',bb:'',ab:''},
+    {name:'Beard Sculpt',bh:'M52 100 C48 56 78 38 100 38 C124 38 152 56 148 100 C140 72 124 62 100 62 C76 62 60 72 52 100Z',ah:'M52 100 C48 56 78 38 100 38 C124 38 152 56 148 100 C140 72 124 62 100 62 C76 62 60 72 52 100Z',bb:'M50 116 C42 196 78 222 100 222 C122 222 158 196 150 116 C142 152 124 164 100 164 C76 164 58 152 50 116Z',ab:'M58 128 C58 168 82 182 100 182 C118 182 142 168 142 128 C134 150 120 156 100 156 C80 156 66 150 58 128Z'},
+    {name:'Textured Crop',bh:'M48 100 C40 50 70 24 100 26 C130 24 160 50 152 100 C148 64 130 52 100 52 C70 52 52 64 48 100Z',ah:'M50 96 C46 50 74 36 100 34 C128 36 154 50 150 96 C146 76 130 66 100 70 C70 66 54 76 50 96Z M66 44 L72 30 L84 40Z M96 36 L104 24 L112 36Z M120 40 L132 30 L136 46Z',bb:'',ab:'M64 132 C66 160 84 168 100 168 C116 168 134 160 136 132 C128 148 116 152 100 152 C84 152 72 148 64 132Z'}
+  ],
+  crew:[
+    {name:'Nleeny',role:'Master Barber',bio:'Fades and tapers with a steady hand. Known for the cleanest neckline in the lounge.'},
+    {name:'Jinnny',role:'Senior Stylist',bio:'Texture, crops and long-hair shaping. Loves a before-and-after.'},
+    {name:'Karam',role:'Beard Specialist',bio:'Hot-towel shaves and beard design with razor-sharp line work.'}
+  ],
+  hours:[['Monday','10:00 am – 9:00 pm',1],['Tuesday','10:00 am – 9:00 pm',2],['Wednesday','10:00 am – 9:00 pm',3],['Thursday','10:00 am – 9:00 pm',4],['Friday','10:00 am – 10:00 pm',5],['Saturday','9:00 am – 10:00 pm',6],['Sunday','11:00 am – 6:00 pm',0]],
+  book(s){this.done=false;this.err='';if(s)this.form.service=s;this.modal=true},
+  submit(){if(!this.form.name.trim()||!this.form.date){this.err='Add your name and a date to continue.';return}this.err='';this.done=true}
+}}
+</script>
+</body>
+</html>
